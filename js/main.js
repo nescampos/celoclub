@@ -168,7 +168,7 @@ async function getProposalById(){
       $('.proposal_description').text(clubs.description);
       $('#proposal_creator').text(clubs.creator);
       $('#proposal_destination').text(clubs.destination);
-      $('#proposal_amount').text(clubs.amount / Math.pow(10,18) );
+      $('#proposal_amount').text(web3.utils.fromWei(clubs.amount));
       $('#proposal_status').text(clubs.status);
       $('#votes_for').text(clubs.votesFor);
       $('#votes_against').text(clubs.votesAgainst);
@@ -289,7 +289,7 @@ async function getProposals() {
         contractTickerTd.innerHTML = '<b>' + valor.description + '</b>';
         tbodyTr.appendChild(contractTickerTd);
         var balanceTd = document.createElement('td');
-        balanceTd.innerHTML = '<b>' + (valor.amount / Math.pow(10,18))  + '</b>';
+        balanceTd.innerHTML = '<b>' + web3.utils.fromWei(valor.amount)  + '</b>';
         tbodyTr.appendChild(balanceTd);
         var balanceUSDTd2 = document.createElement('td');
         balanceUSDTd2.innerHTML = '<b>' + valor.status+ '</b>';
@@ -410,7 +410,7 @@ async function createProposal() {
     if(my_wallet !== undefined)
     {
       $('.loading_message_creating').css("display","block");
-      proposal_amount = (proposal_amount/ Math.pow(10,18));
+      proposal_amount = web3.utils.toWei(proposal_amount);
       const query = contractPublic.methods.createProposal(clubId,proposal_amount, proposal_address, proposal_description);
       const encodedABI = query.encodeABI();
       
@@ -513,7 +513,7 @@ async function getClub() {
         $('#club_id').text(club.id);
         $('.club_members').text(club.memberCount);
         $('.club_proposals').text(club.proposalCount);
-        $('.club_balance').text((club.pool/ Math.pow(10,18)));
+        $('.club_balance').text(web3.utils.fromWei(club.pool));
       }
     }
   }
@@ -642,7 +642,7 @@ async function contributeClub() {
       $('.successContributeClub').text("Contributing to the club...");
       
       if(contractPublic != undefined) {
-        amountAE = (amountAE / Math.pow(10,18));
+        amountAE = web3.utils.toWei(amountAE);
         //await contractPublic.$call('contributeToClub', [clubId])
         try {
           const query = contractPublic.methods.contributeToClub(clubId);
